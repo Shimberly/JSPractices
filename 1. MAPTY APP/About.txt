@@ -1,0 +1,8 @@
+MAPTY APP
+
+Project from a Javascript course from UDEMY.
+Practices about OOP, Geolocation, External Libraries and more.
+
+Reference:
+The Complete JavaScript Course 2025: From Zero to Expert!
+from Jonas Schmedtmann in UDEMY platform.
