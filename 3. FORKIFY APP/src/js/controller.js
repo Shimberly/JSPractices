@@ -10,10 +10,10 @@ import { async } from 'regenerator-runtime';
 //console.log(icons); //with this Parcel can take the correct route when building
 
 ///////////////////////////////////////
-if (module.hot) {
-  //when saving it would no reload the page if the change it affects just the console
-  module.hot.accept();
-}
+//if (module.hot) {
+//when saving it would no reload the page if the change it affects just the console
+//// module.hot.accept();
+//}
 
 const controlRecipes = async function () {
   // the await will stop the code until the fetch is loaded, thats why we put in a aync function, async makes the function load in background
@@ -23,6 +23,8 @@ const controlRecipes = async function () {
 
     if (!id) return; //Guard clause
     recipeView.renderSpinner();
+    // 0. Update results view to mark selected search result
+    resultsView.update(model.getSearchResultsPage());
 
     //1. Loading recipe
     await model.loadRecipe(id);
@@ -66,8 +68,25 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
+const controlServings = function (newServings) {
+  //Update the recipe servings (in state)
+  model.updateServings(newServings);
+
+  //Update the recipe view (render again)
+  //recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
+};
+
+const controlAddBookmark = function () {
+  model.addBookmark(model.state.recipe);
+  console.log(model.state.recipe);
+  recipeView.update(model.state.recipe);
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
 };
