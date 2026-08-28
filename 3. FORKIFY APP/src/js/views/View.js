@@ -2,34 +2,45 @@ import icons from 'url:../../img/icons.svg';
 export default class View {
   _data;
 
-  render(data) {
+  /**
+   * Render the recieve object to the DOM
+   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM
+   * @returns {undefined | string} A markup string is returned if render=false
+   * @this {Object} View instance
+   * @author Kimberly Muñoz
+   * @todo Finish implementation :B
+   */
+  render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
     this._data = data;
     //console.log(data);
     const markup = this._generateMarkup();
+    if (!render) return markup;
+
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   update(data) {
     this._data = data;
-    console.log(data);
+    //console.log(data);
     const newMarkup = this._generateMarkup();
 
     const newDOM = document.createRange().createContextualFragment(newMarkup);
     const newElements = Array.from(newDOM.querySelectorAll('*'));
     const curElements = Array.from(this._parentElement.querySelectorAll('*'));
-    console.log(newElements);
-    console.log(curElements);
+    //console.log(newElements);
+    //console.log(curElements);
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
       //console.log(curEl, newEl.isEqualNode(curEl));
       //Updates changes text
       if (
         !newEl.isEqualNode(curEl) &&
-        newEl.firstChild.nodeValue.trim() !== '' //IF THE FIRST CHILD OF THE ELEMENT IS DIRECT TEXT OR NOT
+        newEl.firstChild?.nodeValue.trim() !== '' //IF THE FIRST CHILD OF THE ELEMENT IS DIRECT TEXT OR NOT
       ) {
         //console.log(newEl.firstChild.nodeValue.trim());
         curEl.textContent = newEl.textContent;
